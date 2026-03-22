@@ -71,8 +71,16 @@ section{padding:100px 40px;max-width:1200px;margin:0 auto;position:relative;z-in
 .fc{background:var(--bg-card);border:1px solid var(--border-light);border-radius:12px;padding:28px;transition:all .4s;box-shadow:0 2px 12px rgba(0,0,0,.2)}.fc:hover{border-color:var(--border);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.3)}
 .fi{font-size:28px;margin-bottom:12px}.ft{font-size:16px;font-weight:600;color:var(--text-bright);margin-bottom:8px}.fx{font-size:14px;color:var(--text-dim);font-weight:300;line-height:1.7}
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:40px}
-.sc{aspect-ratio:16/9;background:var(--bg-card);border:1px solid var(--border-light);border-radius:12px;display:flex;align-items:center;justify-content:center;transition:all .4s;box-shadow:0 2px 12px rgba(0,0,0,.2)}.sc:hover{border-color:var(--border);transform:scale(1.03)}
+.sc{aspect-ratio:16/9;background:var(--bg-card);border:1px solid var(--border-light);border-radius:12px;display:flex;align-items:center;justify-content:center;transition:all .4s;box-shadow:0 2px 12px rgba(0,0,0,.2);cursor:default}.sc:hover{border-color:var(--border);transform:scale(1.03)}
+.sc.has-art{cursor:pointer;position:relative;overflow:hidden}.sc.has-art img{width:100%;height:100%;object-fit:cover;display:block}.sc.has-art .sp{position:absolute;bottom:0;left:0;right:0;padding:10px;background:linear-gradient(transparent,rgba(6,6,16,.8))}.sc.has-art .kn{color:var(--gold-light)}
+.sc.has-art .art-hint{position:absolute;top:8px;right:8px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:rgba(6,6,16,.7);border:1px solid rgba(212,168,67,.3);border-radius:10px;padding:3px 10px;opacity:0;transition:opacity .3s}.sc.has-art:hover .art-hint{opacity:1}
 .sp{text-align:center}.sp .ki{font-size:32px;opacity:.5}.sp .kn{font-size:13px;color:var(--text-dim);margin-top:6px}
+/* Lightbox */
+.lb{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:20px}.lb.open{display:flex}
+.lb-inner{position:relative;max-width:1200px;width:100%}.lb-inner img{width:100%;border-radius:12px;box-shadow:0 0 0 1px rgba(212,168,67,.2),0 40px 80px rgba(0,0,0,.8)}
+.lb-title{text-align:center;margin-top:16px;font-family:'Great Vibes',cursive;font-size:28px;color:var(--gold)}
+.lb-sub{text-align:center;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);margin-top:4px}
+.lb-close{position:absolute;top:-16px;right:-16px;width:36px;height:36px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);color:var(--text-dim);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s}.lb-close:hover{color:var(--gold);border-color:var(--gold)}
 .ag{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
 .as{font-size:16px;color:var(--text);font-weight:300;line-height:1.9}.as p{margin-bottom:20px}.as .hl{color:var(--gold);font-weight:500}
 .tc{display:flex;flex-direction:column;gap:24px}
@@ -94,6 +102,16 @@ footer{padding:60px 40px;text-align:center;border-top:1px solid rgba(212,168,67,
 </style>
 </head>
 <body>
+
+<!-- Lightbox -->
+<div class="lb" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <div class="lb-inner">
+    <div class="lb-close" onclick="closeLightbox()">✕</div>
+    <img id="lb-img" src="" alt="">
+    <div class="lb-title" id="lb-title"></div>
+    <div class="lb-sub" id="lb-sub"></div>
+  </div>
+</div>
 
 <div class="bg-dots" id="dotsLayer"></div>
 <canvas id="drawCanvas"></canvas>
@@ -125,7 +143,7 @@ footer{padding:60px 40px;text-align:center;border-top:1px solid rgba(212,168,67,
 <div class="gf"><div class="fc"><div class="fi">🏰</div><div class="ft">10 Kingdoms</div><div class="fx">Over 200 levels across visually unique worlds, each with corrupted creatures, hidden secrets, and epic boss battles.</div></div><div class="fc"><div class="fi">🧝</div><div class="ft">Deep Customization</div><div class="fx">Create your Elf hero from scratch — face, hair, outfits, weapons, earrings, and a Gnome companion you can dress to match.</div></div><div class="fc"><div class="fi">👥</div><div class="ft">1&ndash;4 Player Co-op</div><div class="fx">Play solo or team up with friends. Each player finds unique collectibles, encouraging cooperation and sharing.</div></div><div class="fc"><div class="fi">💣</div><div class="ft">Magical Orb Bombs</div><div class="fx">The most powerful weapon in the game comes with a catch — a hilarious mom cutscene that interrupts every battle. Collect them all.</div></div><div class="fc"><div class="fi">🧩</div><div class="ft">Picture Fragments</div><div class="fx">Scattered across every kingdom, these mysterious memory fragments hold secrets that could change the course of your entire quest.</div></div><div class="fc"><div class="fi">🎭</div><div class="ft">A Story with Secrets</div><div class="fx">Nothing is as it seems. The deeper you go, the more you discover. Some truths can only be found by those who look carefully.</div></div></div></section>
 <div class="sd"></div>
 
-<section id="screenshots" class="fade-in"><div class="sl">Gallery</div><h2 class="st">The Kingdoms Await</h2><p class="sx">Journey through 10 unique kingdoms. Each one hides its own secrets, creatures, and challenges.</p><div class="sg"><div class="sc"><div class="sp"><div class="ki">🌲</div><div class="kn">Forest Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">🍄</div><div class="kn">Mushroom Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">💎</div><div class="kn">Crystal Cave</div></div></div><div class="sc"><div class="sp"><div class="ki">🐸</div><div class="kn">Swamp Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">👻</div><div class="kn">Haunted Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">❄️</div><div class="kn">Ice Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">🏜️</div><div class="kn">Desert Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">🌊</div><div class="kn">Ocean Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">☁️</div><div class="kn">Cloud Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">🔮</div><div class="kn">Witch's Kingdom</div></div></div></div></section>
+<section id="screenshots" class="fade-in"><div class="sl">Gallery</div><h2 class="st">The Kingdoms Await</h2><p class="sx">Journey through 10 unique kingdoms. Each one hides its own secrets, creatures, and challenges.</p><div class="sg"><div class="sc has-art" onclick="openLightbox('forest-kingdom.png','Forest Kingdom','Concept Art — Early Development')"><img src="forest-kingdom.png" alt="Forest Kingdom Concept Art"><div class="sp"><div class="kn">🌲 Forest Kingdom</div></div><div class="art-hint">View Art</div></div><div class="sc"><div class="sp"><div class="ki">🍄</div><div class="kn">Mushroom Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">💎</div><div class="kn">Crystal Cave</div></div></div><div class="sc"><div class="sp"><div class="ki">🐸</div><div class="kn">Swamp Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">👻</div><div class="kn">Haunted Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">❄️</div><div class="kn">Ice Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">🏜️</div><div class="kn">Desert Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">🌊</div><div class="kn">Ocean Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">☁️</div><div class="kn">Cloud Kingdom</div></div></div><div class="sc"><div class="sp"><div class="ki">🔮</div><div class="kn">Witch's Kingdom</div></div></div></div></section>
 <div class="sd"></div>
 
 <section id="about" class="fade-in"><div class="sl">Our Story</div><h2 class="st">About Luna Kit Games</h2><div class="ag"><div class="as"><p>Luna Kit Games started with a simple idea: <span class="hl">what if an eight-going-on-nine-year-old could design a real video game?</span></p><p>Addy has always been a creator — drawing characters, inventing worlds, and telling stories that surprise everyone around her. When she started sketching Elves, Dwarves, and magical kingdoms, her dad saw something special. Not just a kid doodling, but a genuine game designer with a vision.</p><p>So they made a deal: Addy would be the <span class="hl">Creative Director and Game Designer</span> — designing the characters, the story, the worlds, and the art. Addy's Daddy would handle the technical side — setting up the tools, managing the code, and making sure her vision could actually be played.</p><p>Together, armed with AI tools, a game engine, and a LOT of imagination, they're proving that the next great game studio doesn't need a big office or a huge team. It just needs a great story, a bold creative vision, and the determination to build it.</p><p>Luna Kit Games is named after Addy's love of foxes (a kit is a baby fox) and the magic of moonlight (luna). The studio logo — a sleeping fox kit curled around a crescent moon — represents the dreams that become reality when you're brave enough to build them.</p></div><div class="tc"><div class="td"><div class="tn">Addy</div><div class="tr">Creative Director & Game Designer</div><div class="tb">The eight-going-on-nine-year-old visionary behind The Throne of The Forgotten Spell. Addy designs every character, paints the original concept art, writes the storylines, names the kingdoms, and makes every creative decision. Her hand-drawn mandala became the stained glass window in the Dwarf Castle. This is her game.</div><div class="tp">When she's not designing video games, Addy loves storytelling, crafting, playing sports, sailing, and spending time with her pets. She has three cats, two dogs, two guinea pigs, one hamster, and a fish — so her world is never short on characters.</div></div><div class="td"><div class="tn">Addy's Daddy</div><div class="tr">Technical Direction & Development</div><div class="tb">Mechanical engineer turned vibe coder and tech entrepreneur. He handles the technical infrastructure — Unity, GitHub, deployment, and AI-assisted development. His job is to make sure Addy's creative vision becomes a playable reality.</div><div class="tp">Outside of Luna Kit Games, he enjoys spending time creating and building with his two kids, hanging out with the family's many pets, and adventuring with his wonderful fianc&eacute;e. A tech entrepreneur for the last 15 years, he fills his free time with vibe coding, building businesses, flying planes, riding motorcycles, spending time in nature, and exploring the world.</div></div></div></div></section>
@@ -318,6 +336,20 @@ document.querySelectorAll('.fade-in').forEach(function(el){
     entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.08 }).observe(el);
 });
+
+// ============ LIGHTBOX ============
+function openLightbox(src, title, sub){
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-title').textContent = title;
+  document.getElementById('lb-sub').textContent = sub;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLightbox(); });
 
 // ============ NAV SHADOW ============
 window.addEventListener('scroll', function(){
